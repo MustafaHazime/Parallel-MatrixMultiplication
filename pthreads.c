@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <time.h>
+#include <sys/time.h>
 
 #define M 4 // number of threads
 #define MAX 1000 // maximum value for matrix elements
@@ -33,6 +33,7 @@ void *multiply(void *arg) {
 
 int main() {
     int i, j;
+    struct timeval start, end;
     
     // input the size of matrices
     printf("Enter the size of matrix A (M x K): ");
@@ -69,6 +70,9 @@ int main() {
         }
     }
 
+    // start timer
+    gettimeofday(&start, NULL);
+
     // create M threads and assign them to compute their assigned rows
     pthread_t threads[M];
     struct range ranges[M];
@@ -84,6 +88,12 @@ int main() {
         pthread_join(threads[i], NULL);
     }
 
+    // stop timer
+    gettimeofday(&end, NULL);
+
+    // calculate execution time in milliseconds
+    long long int time = (end.tv_sec - start.tv_sec) * 1000LL + (end.tv_usec - start.tv_usec) / 1000LL;
+
     // print matrices A, B, and C
     printf("\nMatrix A:\n");
     for (i = 0; i < N; i++) {
@@ -92,8 +102,7 @@ int main() {
         }
         printf("\n");
     }
-
-       printf("Matrix B:\n");
+        printf("Matrix B:\n");
     for (i = 0; i < K; i++) {
         for (j = 0; j < N; j++)
             printf("%d ", B[i][j]);
