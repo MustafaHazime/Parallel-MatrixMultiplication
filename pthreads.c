@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <time.h>
 
 #define M 4 // number of threads
 #define MAX 1000 // maximum value for matrix elements
